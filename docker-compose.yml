@@ -1,0 +1,26 @@
+version: '3'
+services:
+  nuget-server:
+    container_name: nuget-server
+    image: idoop/docker-nuget-server:latest
+    network_mode: "host"
+    restart: always
+    environment:
+      NUGET_API_KEY: "112233"
+      UPLOAD_MAX_FILESIZE: "40M"
+      
+      SERVER_NAME: "nuget.example.com"
+      WORKER_PROCESSES: "2"
+    volumes:
+      - nuget-db:/var/www/simple-nuget-server/db
+      - nuget-packagefiles:/var/www/simple-nuget-server/packagefiles
+      - nuget-nginx:/etc/nginx
+    ulimits:
+      nproc: 8096
+      nofile:
+        soft: 65535
+        hard: 65535
+volumes:
+  nuget-db:
+  nuget-packagefiles:
+  nuget-nginx:
